@@ -172,4 +172,5 @@ spec:
       name: source
     - description: The workspace consisting of the custom maven settings provided by the user.
       name: maven-settings
-
+    - name: maven-local
+      mountPath: /tekton/home/.m2

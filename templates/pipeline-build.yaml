@@ -1,5 +1,5 @@
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: {{ .Values.app.name }}-build
@@ -55,12 +55,16 @@ spec:
           value: $(params.source-repo)
         - name: revision
           value: $(params.source-branch)
+        - name: sslVerify
+          value: 'false'
       taskRef:
-        kind: ClusterTask
+        kind: Task
         name: git-clone
       workspaces:
         - name: output
           workspace: source-folder
+        - name: ssh-directory
+          workspace: sshkey          
 {{- if eq .Values.git.verify_commits "enabled" }}
     - name: verify-commit
       params:
@@ -99,6 +103,8 @@ spec:
           workspace: source-folder
         - name: maven-settings
           workspace: maven-settings
+        - name: maven-local
+          workspace: maven-local          
     - name: scan-source
       retries: 5
       params:
@@ -267,3 +273,5 @@ spec:
     - name: maven-settings
     - name: docker-config
     - name: reports
+    - name: sshkey
+    - name: maven-local    

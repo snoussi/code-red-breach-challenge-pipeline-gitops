@@ -5,7 +5,7 @@ app:
   challenge_password: "{{ code_red_breach_challenge_gitea_customize_lab_challenge_password }}"
 
 git:
-  branch: master
+  branch: main
   repo: https://{{ code_red_breach_challenge_gitea_customize_gitea_endpoint }}/gitea/{{ code_red_breach_challenge_gitea_customize_lab_username }}-pipeline-gitops.git
   org: development
   name: pipeline-gitops
