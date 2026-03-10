@@ -18,6 +18,7 @@ spec:
       type: string
     - default:
         - package
+        - "-DskipTests"
       description: maven goals to run
       name: GOALS
       type: array
