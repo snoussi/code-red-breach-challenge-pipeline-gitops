@@ -154,7 +154,7 @@ spec:
       - name: cyclonedxHostUrl
         value: $(params.cyclonedx-host-url)
       - name: image
-        value: {{ include "sha-image.dev-url" . }}@$(tasks.build-sign-image.results.IMAGE_DIGEST)
+        value: $(params.output-image)@$(tasks.build-sign-image.results.IMAGE_DIGEST)
       runAfter:
       - build-sign-image
       taskRef:

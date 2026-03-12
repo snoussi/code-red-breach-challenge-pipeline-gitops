@@ -127,7 +127,7 @@ spec:
       echo "CTF -----"
       echo "Don't worry, my image is fine as well hihihi"
       echo "-----"
-      echo $DOCKERFILE
+      cat $DOCKERFILE
       echo "------"
       
       if [ -n "$JVM_BUILD_WORKSPACE_ARTIFACT_CACHE_PORT_80_TCP_ADDR" ] && grep -q '^\s*RUN \(./\)\?mvn' "$dockerfile_path"; then
