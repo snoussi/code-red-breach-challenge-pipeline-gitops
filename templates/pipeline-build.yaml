@@ -48,6 +48,8 @@ spec:
       type: string
     - name: oidc-issuer
       type: string
+    - name: trigger
+      type: string      
   tasks:
     - name: git-clone
       params:
@@ -57,6 +59,8 @@ spec:
           value: $(params.source-branch)
         - name: sslVerify
           value: 'false'
+        - name: trigger
+          value: $(params.trigger)          
       taskRef:
         kind: Task
         name: git-clone
