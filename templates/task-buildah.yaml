@@ -122,13 +122,6 @@ spec:
         echo "Cannot find Dockerfile $DOCKERFILE"
         exit 1
       fi
-
-      echo "-----"
-      echo "CTF"
-      echo "-----"
-      echo 'DOCKERFILE'
-      grep -v "^FROM" Dockerfile
-      echo "------"
       
       if [ -n "$JVM_BUILD_WORKSPACE_ARTIFACT_CACHE_PORT_80_TCP_ADDR" ] && grep -q '^\s*RUN \(./\)\?mvn' "$dockerfile_path"; then
         sed -i -e "s|^\s*RUN \(\(./\)\?mvn\(.*\)\)|RUN echo \"<settings><mirrors><mirror><id>mirror.default</id><url>http://$JVM_BUILD_WORKSPACE_ARTIFACT_CACHE_PORT_80_TCP_ADDR/v1/cache/default/0/</url><mirrorOf>*</mirrorOf></mirror></mirrors></settings>\" > /tmp/settings.yaml; \1 -s /tmp/settings.yaml|g" "$dockerfile_path"
@@ -179,6 +172,11 @@ spec:
       container=$(buildah from --pull-never $IMAGE)
       buildah mount $container | tee /workspace/container_path
       echo $container > /workspace/container_name
+
+      echo "CTF "
+      echo 'DOCKERFILE'
+      grep -v "^FROM" Dockerfile
+      echo "-----"
 
       # Save the SBOM produced by Cachi2 so it can be merged into the final SBOM later
       if [ -n "${PREFETCH_INPUT}" ]; then
