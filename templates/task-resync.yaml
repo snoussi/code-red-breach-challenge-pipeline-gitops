@@ -11,7 +11,7 @@ spec:
     - args:
         - >-
           oc delete pod -n $(params.COMPONENT_ID)-{{ .Values.lab.username }} -l
-          app.kubernetes.io/instance={{ .Values.lab.username }}-$(params.COMPONENT_ID)-manifests
+          app.kubernetes.io/instance={{ .Values.lab.username }}-$(params.COMPONENT_ID)-manifests  && echo $(oc get app {{ .Values.lab.username }}-env-manifests -n openshift-gitops -o jsonpath='{.metadata.annotations}')
       command:
         - /bin/bash
         - '-c'
