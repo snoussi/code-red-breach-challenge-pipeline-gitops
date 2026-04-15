@@ -6,7 +6,7 @@ app:
 
 git:
   branch: main
-  repo: https://{{ code_red_breach_challenge_gitea_customize_gitea_endpoint }}/gitea/{{ code_red_breach_challenge_gitea_customize_lab_username }}-pipeline-gitops.git
+  repo: https://{{ code_red_breach_challenge_gitea_customize_gitea_endpoint }}/gitea/{{ code_red_breach_challenge_gitea_customize_lab_username }}-customers-app.git
   org: development
   name: pipeline-gitops
   host: {{ code_red_breach_challenge_gitea_customize_gitea_endpoint }}
